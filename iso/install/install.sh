@@ -103,7 +103,7 @@ grub-install --target=i386-pc "$selected_disk"  # Install bootloader to MBR
 sed -i 's/GRUB_TIMEOUT=[0-9]\+/GRUB_TIMEOUT=0/' "/etc/default/grub"
 grub-mkconfig -o /boot/grub/grub.cfg
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty firefox base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor
+pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty firefox base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi
 systemctl enable NetworkManager
 
 touch ~/.xinitrc
@@ -140,4 +140,4 @@ sed -i '/\/dev\/zram/d' /mnt/etc/fstab
 umount -R /mnt
 
 
-dialog --title "Hotovo!" --msgbox "Nyní se vám restartuje systém a budete moct používat KLIND OS." 10 30  3>&1 1>&2 2>&3 && reboot
+(dialog --title "Hotovo!" --msgbox "Nyní se vám restartuje systém a budete moct používat KLIND OS." 10 30  3>&1 1>&2 2>&3) && reboot

@@ -24,7 +24,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ((modm .|. shiftMask, xK_c     ), kill)
 
     , ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-    , ((modm .|. shiftMask, xK_s), spawn "/root/selectprogram.sh")
+    , ((modm .|. shiftMask, xK_s), spawn "bash /root/selectprogram.sh")
     ]
 
 
