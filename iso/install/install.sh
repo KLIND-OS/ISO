@@ -140,4 +140,4 @@ sed -i '/\/dev\/zram/d' /mnt/etc/fstab
 umount -R /mnt
 
 
-(dialog --title "Hotovo!" --msgbox "Nyní se vám restartuje systém a budete moct používat KLIND OS." 10 30  3>&1 1>&2 2>&3) && reboot
+dialog --title "Hotovo!" --msgbox "Nyní se vám restartuje systém a budete moct používat KLIND OS." 10 30  3>&1 1>&2 2>&3
