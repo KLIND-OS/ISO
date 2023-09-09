@@ -16,8 +16,9 @@ startup = do
     spawn "xsetroot -cursor_name left_ptr"
     spawnOnce "setxkbmap cz"
     spawnOnce "dunst"
-    spawnOnce "~/client.AppImage --no-sandbox && poweroff"
     spawnOnce "xrandr --output $(xrandr | awk '/ primary/{print $1}') --mode 1920x1080"
+    spawnOnce "~/client.AppImage --no-sandbox && poweroff"
+    
 
 # Change the resolution to 1080p
 xrandr --output "$display_name" --mode "$resolution""
