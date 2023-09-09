@@ -19,7 +19,7 @@ function main() {
             # Instalace klienta
             git clone https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
             (cd /root/KLIND-OS-Client && npm install)
-            (cd /root/KLIND-OS-Client && npm build)
+            (cd /root/KLIND-OS-Client && npm run build)
             rm -rf /root/client.AppImage
             cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
             rm -rf /root/KLIND-OS-Client
