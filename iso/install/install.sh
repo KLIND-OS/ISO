@@ -17,17 +17,17 @@ function select_disk_dialog() {
 function partition_disk() {
     local disk="$1"
     wipefs -a "$disk"
-    parted "$disk" mklabel msdos  # Use msdos for MBR partitioning
+    parted "$disk" mklabel msdos  
     parted -a opt "$disk" mkpart primary ext4 1MiB 500MiB
-    parted -a opt "$disk" mkpart primary ext4 500MiB 100%  # Create a single partition
+    parted -a opt "$disk" mkpart primary ext4 500MiB 100%  
     mkfs.ext4 -F "${disk}1"
     mkfs.ext4 -F "${disk}2"
 }
 
-# Select disk
+
 selected_disk=$(select_disk_dialog)
 
-# Locales
+
 regions=( $(ls /usr/share/zoneinfo/) )
 regions_options=()
 for option in "${regions[@]}"; do
@@ -40,10 +40,10 @@ for option in "${cities[@]}"; do
     cities_options+=("$option" "")
 done
 city=$(dialog --nocancel --menu "Vyberte mesto:" 10 40 3 "${cities_options[@]}" 3>&1 1>&2 2>&3)
-# Hostname
+
 hostname=$(dialog --nocancel --title "Název počítače" --inputbox "Nastavte název počítače (hostname):" 10 30 3>&1 1>&2 2>&3)
 
-# Drivers
+
 drivers=("Intel" "AMD" "NVIDIA" "Virtual box" "Přeskočit instalaci ovladačů")
 drivers_options=()
 for option in "${drivers[@]}"; do
@@ -73,12 +73,12 @@ case "$driver" in
 esac
 
 partition_disk "$selected_disk"
-# Mount the partition
+
 mount "${selected_disk}2" /mnt
 mkdir /mnt/boot
 mount "${selected_disk}1" /mnt/boot
 
-# Install the linux and base
+
 pacstrap /mnt base linux linux-firmware 
 
 
@@ -99,7 +99,7 @@ echo "127.0.1.1    $hostname.localdomain    $hostname" >> /etc/hosts
 echo -e "$root_pass\n$root_pass" | passwd root
 
 pacman -S --noconfirm grub
-grub-install --target=i386-pc "$selected_disk"  # Install bootloader to MBR
+grub-install --target=i386-pc "$selected_disk"  
 sed -i 's/GRUB_TIMEOUT=[0-9]\+/GRUB_TIMEOUT=0/' "/etc/default/grub"
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -122,10 +122,15 @@ touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
-cp ~/bin/client.AppImage /mnt/root
 git clone https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /mnt/root/klindos-server/data
 
 arch-chroot /mnt <<EOF
+git clone https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+(cd /root/KLIND-OS-Client && npm install)
+(cd /root/KLIND-OS-Client && npm build)
+cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
+rm -rf /root/KLIND-OS-Client
+
 (cd /root/klindos-server && npm install express)
 xmonad --recompile
 mkdir /etc/systemd/system/getty@tty1.service.d/

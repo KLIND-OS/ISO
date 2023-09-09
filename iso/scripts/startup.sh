@@ -15,6 +15,15 @@ function main() {
             pacman -Suy --noconfirm
             rm -rf /root/klindos-server/data
             git clone https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /root/klindos-server/data
+            
+            # Instalace klienta
+            git clone https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+            (cd /root/KLIND-OS-Client && npm install)
+            (cd /root/KLIND-OS-Client && npm build)
+            rm -rf /root/client.AppImage
+            cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
+            rm -rf /root/KLIND-OS-Client
+
             dialog --title "Hotovo!" --msgbox "KLIND OS a systém byl aktualizován!" 10 30  3>&1 1>&2 2>&3
             main
             ;;
