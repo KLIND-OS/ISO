@@ -144,5 +144,11 @@ genfstab -U /mnt >> /mnt/etc/fstab
 sed -i '/\/dev\/zram/d' /mnt/etc/fstab
 umount -R /mnt
 
-
-dialog --title "Hotovo!" --msgbox "Nyní se vám restartuje systém a budete moct používat KLIND OS." 10 30  3>&1 1>&2 2>&3
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo "Instalace byla hotova! Stiskněte enter pro pokračování..."
+read
+reboot
