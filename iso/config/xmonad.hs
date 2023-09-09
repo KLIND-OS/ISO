@@ -18,11 +18,6 @@ startup = do
     spawnOnce "dunst"
     spawnOnce "xrandr --output $(xrandr | awk '/ primary/{print $1}') --mode 1920x1080"
     spawnOnce "~/client.AppImage --no-sandbox && poweroff"
-    
-
-# Change the resolution to 1080p
-xrandr --output "$display_name" --mode "$resolution""
-
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ 
