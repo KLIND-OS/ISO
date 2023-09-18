@@ -103,7 +103,7 @@ grub-install --target=i386-pc "$selected_disk"
 sed -i 's/GRUB_TIMEOUT=[0-9]\+/GRUB_TIMEOUT=0/' "/etc/default/grub"
 grub-mkconfig -o /boot/grub/grub.cfg
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty firefox base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi
+pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi
 systemctl enable NetworkManager
 
 touch ~/.xinitrc
