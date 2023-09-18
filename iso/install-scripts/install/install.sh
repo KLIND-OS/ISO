@@ -100,8 +100,7 @@ echo -e "$root_pass\n$root_pass" | passwd root
 
 pacman -S --noconfirm grub
 grub-install --target=i386-pc "$selected_disk"  
-sed -i 's/GRUB_TIMEOUT=[0-9]\+/GRUB_TIMEOUT=0/' "/etc/default/grub"
-grub-mkconfig -o /boot/grub/grub.cfg
+cp /etc/default/grub /etc/default/grub.backup
 
 pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi
 systemctl enable NetworkManager
@@ -122,10 +121,13 @@ touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
-git clone https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /mnt/root/klindos-server/data
+git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /mnt/root/klindos-server/data
+cp ~/config/grub /mnt/default/grub
+
 
 arch-chroot /mnt <<EOF
-git clone https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+grub-mkconfig -o /boot/grub/grub.cfg
+git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
 (cd /root/KLIND-OS-Client && npm install)
 (cd /root/KLIND-OS-Client && npm run build)
 cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
