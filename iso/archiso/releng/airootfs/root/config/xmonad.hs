@@ -17,6 +17,7 @@ startup = do
     spawnOnce "setxkbmap cz"
     spawnOnce "dunst"
     spawnOnce "xrandr --output $(xrandr | awk '/ primary/{print $1}') --mode 1920x1080"
+    spawnOnce "picom"
     spawnOnce "~/client.AppImage --no-sandbox && poweroff"
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
