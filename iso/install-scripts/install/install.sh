@@ -2,14 +2,37 @@
 root_pass="1234"
 
 function select_disk_dialog() {
-    local disks=($(lsblk -rno NAME,TYPE | awk '$2=="disk" {print "/dev/"$1}'))
+    local disks=()
     local dialog_options=()
 
-    for disk in "${disks[@]}"; do
-        dialog_options+=("$disk" "")
-    done
+    while IFS= read -r line; do
+        local disk_name=$(udevadm info -n "$line" -q property | grep "ID_MODEL=" | cut -d'=' -f2)
+        local disk_size_bytes=$(lsblk -bdno SIZE "$line")
+        
+        if [ -n "$disk_name" ]; then
+            local disk_size_human=""
+            local size="$disk_size_bytes"
 
-    local selected_disk=$(dialog --nocancel --menu "Vyberte disk na ktery chcete nainstalovat KLIND OS:" 10 40 3 "${dialog_options[@]}" 3>&1 1>&2 2>&3)
+            if ((size > 1099511627776)); then
+                disk_size_human=$(awk "BEGIN{printf \"%.2f TiB\",${size}/1099511627776}")
+            elif ((size > 1073741824)); then
+                disk_size_human=$(awk "BEGIN{printf \"%.2f GiB\",${size}/1073741824}")
+            elif ((size > 1048576)); then
+                disk_size_human=$(awk "BEGIN{printf \"%.2f MiB\",${size}/1048576}")
+            elif ((size > 1024)); then
+                disk_size_human=$(awk "BEGIN{printf \"%.2f KiB\",${size}/1024}")
+            else
+                disk_size_human="${size} Bytes"
+            fi
+            
+            disks+=("$line $disk_name $disk_size_human $disk_fstype")
+            dialog_options+=("$line" "Jméno: $disk_name, Velikost: $disk_size_human")
+        fi
+    done < <(lsblk -rno NAME,TYPE | awk '$2=="disk" {print "/dev/"$1}')
+
+    local selected_disk_info=$(dialog --nocancel --menu "Vyberte disk na ktery chcete nainstalovat KLIND OS:" 12 80 4 "${dialog_options[@]}" 3>&1 1>&2 2>&3)
+
+    local selected_disk=$(echo "$selected_disk_info" | cut -d' ' -f1)
     
     echo "$selected_disk"
 }
