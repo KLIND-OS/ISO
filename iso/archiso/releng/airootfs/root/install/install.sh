@@ -145,7 +145,7 @@ echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
 git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /mnt/root/klindos-server/data
-cp ~/config/grub /mnt/default/grub
+cp ~/config/grub /mnt/etc/default/grub
 
 
 arch-chroot /mnt <<EOF
