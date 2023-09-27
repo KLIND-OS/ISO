@@ -9,6 +9,7 @@ function main() {
     case "$option" in
         "Spustit KLIND OS")
             nohup node ~/klindos-server/server.js &
+            nohup bash ~/automount/automount.sh &
             startx
             ;;
         "Aktualizovat KLIND OS a systém")
