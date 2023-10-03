@@ -16,7 +16,7 @@ startup = do
     spawn "xsetroot -cursor_name left_ptr"
     spawnOnce "setxkbmap cz"
     spawnOnce "dunst"
-    spawnOnce "xrandr --output $(xrandr | awk '/ primary/{print $1}') --mode 1920x1080"
+    spawnOnce "bash /root/scripts/mirror.sh"
     spawnOnce "picom"
     spawnOnce "~/client.AppImage --no-sandbox && poweroff"
 
