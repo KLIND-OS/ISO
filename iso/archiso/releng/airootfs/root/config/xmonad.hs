@@ -8,7 +8,7 @@ import qualified Data.Map        as M
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.SpawnOnce ( spawnOnce )
-
+import Graphics.X11.ExtraTypes.XF86 (xF86XK_AudioLowerVolume, xF86XK_AudioRaiseVolume, xF86XK_AudioMute, xF86XK_MonBrightnessDown, xF86XK_MonBrightnessUp, xF86XK_AudioPlay, xF86XK_AudioPrev, xF86XK_AudioNext)
 
 
 startup :: X ()
@@ -26,6 +26,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     , ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
     , ((modm .|. shiftMask, xK_s), spawn "bash /root/selectprogram.sh")
+
+    -- Audio keys
+    , ((0,                    xF86XK_AudioPlay), spawn "bash /root/scripts/media.sh play-pause")
+    , ((0,                    xF86XK_AudioPrev), spawn "bash /root/scripts/media.sh previous")
+    , ((0,                    xF86XK_AudioNext), spawn "bash /root/scripts/media.sh next")
+    , ((0,                    xF86XK_AudioRaiseVolume), spawn "bash /root/scripts/media.sh up")
+    , ((0,                    xF86XK_AudioLowerVolume), spawn "bash /root/scripts/media.sh down")
+    , ((0,                    xF86XK_AudioMute), spawn "bash /root/scripts/media.sh mute")
     ]
 
 
