@@ -11,7 +11,7 @@ while true; do
         if [[ "$device" != loop* && "$device" != sr* ]]; then
             if ! [[ " ${connected_drives[@]} " =~ " ${device} " ]]; then
                 connected_drives+=("$device")
-                python ./automount_fs.py add $device
+                python ~/automount/automount_fs.py add $device
                 partitions=($(lsblk -o NAME,TYPE,MOUNTPOINT -nr /dev/"$device" | awk '$2 == "part" && $3 == "" {print $1}'))
 
                 # Mount each partition under /mnt
@@ -30,7 +30,7 @@ while true; do
     for drive in "${connected_drives[@]}"; do
         if [[ ! " ${block_devices[@]} " =~ " ${drive} " ]]; then
             if [ -n "$drive" ]; then
-                python ./automount_fs.py remove $drive
+                python ~/automount/automount_fs.py remove $drive
                 # Unmount and remove all partitions associated with the drive
                 for partition in /mnt/${drive}*; do
                     if [ -d "$partition" ]; then
