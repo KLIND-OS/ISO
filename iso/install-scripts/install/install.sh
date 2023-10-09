@@ -140,6 +140,9 @@ mkdir /mnt/root/klindos-server
 cp ~/scripts/startup.sh /mnt/root/
 cp ~/scripts/selectprogram.sh /mnt/root/
 cp ~/scripts/server.js /mnt/root/klindos-server
+mkdir /mnt/root/scripts
+cp ~/scripts/media.sh /mnt/root/scripts
+cp ~/scripts/sendMessageToUI.py /mnt/root/scripts
 touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
