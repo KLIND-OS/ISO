@@ -125,7 +125,7 @@ pacman -S --noconfirm grub
 grub-install --target=i386-pc "$selected_disk"  
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer
+pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl
 systemctl enable NetworkManager
 
 touch ~/.xinitrc
@@ -147,7 +147,8 @@ cp ~/config/xmonad.hs /mnt/root/.xmonad/
 git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /mnt/root/klindos-server/data
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
-
+touch /mnt/root/scripts_run.json
+echo "[]" >> /mnt/root/scripts_run.json
 
 arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
