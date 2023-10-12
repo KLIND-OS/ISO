@@ -18,7 +18,7 @@ startup = do
     spawnOnce "dunst"
     spawnOnce "bash /root/scripts/mirror.sh"
     spawnOnce "picom"
-    spawnOnce "~/client.AppImage --no-sandbox && poweroff"
+    spawnOnce "~/client.AppImage --no-sandbox"
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ 

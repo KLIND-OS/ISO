@@ -1,12 +1,30 @@
 #!/bin/bash
 
-# Get the primary monitor by checking which monitor has the "primary" status
-PRIMARY_MONITOR=$(xrandr --listmonitors | grep "+.*$" | awk '{print $4}')
+primary_display=""
+update_mirror() {
+    connected_displays=($(xrandr --query | grep " connected" | awk '{print $1}'))
+    if [ ${#connected_displays[@]} -lt 2 ]; then
+        return
+    fi
 
-# Get a list of all connected monitors, excluding the primary monitor
-connected_monitors=$(xrandr | grep " connected" | awk '{print $1}' | grep -v "$PRIMARY_MONITOR")
+    if [ "$primary_display" != "${connected_displays[0]}" ]; then
+        primary_display="${connected_displays[0]}"
+        xrandr --output "$primary_display" --primary
+    fi
 
-# Loop through each connected monitor and mirror it with the primary monitor
-for monitor in $connected_monitors; do
-  xrandr --output "$monitor" --same-as "$PRIMARY_MONITOR"
+    for display in "${connected_displays[@]}"; do
+        if [ "$display" != "$primary_display" ]; then
+            xrandr --output "$display" --same-as "$primary_display"
+        fi
+    done
+
+}
+
+# Initial update
+update_mirror
+
+# Monitor for changes in connected displays using inotifywait
+while true; do
+    inotifywait -e modify,create,delete /sys/class/drm/*/status
+    update_mirror
 done
