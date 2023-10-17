@@ -192,7 +192,7 @@ sed -i '/\/dev\/zram/d' /mnt/etc/fstab
 umount -R /mnt
 
 function finish() {
-    response=hostname=$(dialog --nocancel --title "Hotovo!" --inputbox "KLIND OS byl nainstalován! Po restartování odpojte instalační disk od počítače. Napište 'reboot' pro restartování systému." 10 30 3>&1 1>&2 2>&3)
+    response=$(dialog --nocancel --title "Hotovo!" --inputbox "KLIND OS byl nainstalován! Po restartování odpojte instalační disk od počítače. Napište 'reboot' pro restartování systému." 10 30 3>&1 1>&2 2>&3)
     if [[ $response == "reboot" ]]; then
         reboot
     else
