@@ -64,7 +64,20 @@ for option in "${cities[@]}"; do
 done
 city=$(dialog --nocancel --menu "Vyberte mesto:" 10 40 3 "${cities_options[@]}" 3>&1 1>&2 2>&3)
 
-hostname=$(dialog --nocancel --title "Název počítače" --inputbox "Nastavte název počítače (hostname):" 10 30 3>&1 1>&2 2>&3)
+function select_hostname() {
+    if [[ $1 == true ]]; then
+        hostname=$(dialog --nocancel --title "Název počítače" --inputbox "Byl zadán neplatný název počítače" 10 30 3>&1 1>&2 2>&3)
+    else
+        hostname=$(dialog --nocancel --title "Název počítače" --inputbox "Nastavte název počítače (hostname):" 10 30 3>&1 1>&2 2>&3)
+    fi
+    if [[ $hostname =~ ^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9](\.[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])*$ ]]; then
+        echo "$hostname"
+    else
+        select_hostname true
+    fi
+}
+
+hostname=$(select_hostname)
 
 
 drivers=("Intel" "AMD" "NVIDIA" "Virtual box" "Přeskočit instalaci ovladačů")
@@ -178,11 +191,12 @@ genfstab -U /mnt >> /mnt/etc/fstab
 sed -i '/\/dev\/zram/d' /mnt/etc/fstab
 umount -R /mnt
 
-echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-echo "Instalace byla hotova! Stiskněte enter pro pokračování..."
-read
-reboot
+function finish() {
+    response=hostname=$(dialog --nocancel --title "Hotovo!" --inputbox "KLIND OS byl nainstalován! Po restartování odpojte instalační disk od počítače. Napište 'reboot' pro restartování systému." 10 30 3>&1 1>&2 2>&3)
+    if [[ $response == "reboot" ]]; then
+        reboot
+    else
+        finish
+    fi
+}
+finish
