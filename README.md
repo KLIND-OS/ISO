@@ -1,9 +1,29 @@
-# KLIND OS [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/iof2.svg)](https://betteruptime.com/?utm_source=status_badge)
+# KLIND OS - Hlavní repozitář [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/iof2.svg)](https://betteruptime.com/?utm_source=status_badge)
 
 KLIND OS je Arch Linux based operační systém. Grafické rozhraní je nepsáno v JavaScriptu. Tento operační systém není vhodný pro denní použití. Tento software je absolutně bez záruky.
 
-## Jak si stáhnout
+# Repozitáře
 
-Iso soubor si můžete stáhnout na této adrese:
+Seznam všech repozitářů KLIND OS
 
-[klindos.jzitnik.is-a.dev/download](https://klindos.jzitnik.is-a.dev/download)
+## ISO instalační soubor (tento repozitář)
+
+Instalační disk je ISO soubor který obsahuje instalační script pro KLIND OS na Arch Linuxu. [Více info...](README-ISO.md)
+
+## Client
+
+Client je program který spouší KLIND OS (jako webová stránka) v programu. Client je postavený v electronu.
+
+[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Client)
+
+## Server
+
+Server který se používá pro posílání souborů clientovi. Používá se protokol http na localhostu na portu 10000. V tomto repozitáři je hlavní kód KLIND OS.
+
+[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Server)
+
+## Webová stránka
+
+Webová stránka KLIND OS je postavena na Reactu ve ViteJS.
+
+[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Website)

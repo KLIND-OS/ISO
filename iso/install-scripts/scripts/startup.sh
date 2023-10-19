@@ -16,7 +16,7 @@ function main() {
         "Aktualizovat KLIND OS a systém")
             pacman -Suy --noconfirm
             rm -rf /root/klindos-server/data
-            git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Demo-Server /root/klindos-server/data
+            git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Server /root/klindos-server/data
             
             # Instalace klienta
             git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
