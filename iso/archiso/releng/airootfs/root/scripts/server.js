@@ -8,5 +8,5 @@ const staticDirectory = path.join(__dirname, 'data');
 app.use(express.static(staticDirectory));
 
 app.listen(port, '127.0.0.1', () => {
-  console.log(`Server running at http://127.0.0.1:${port}/`);
+  console.log(`KLIND OS Server is running on port ${port}`);
 });

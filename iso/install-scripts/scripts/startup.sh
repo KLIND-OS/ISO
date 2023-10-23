@@ -1,5 +1,5 @@
 function main() {
-    optio=("Spustit KLIND OS" "Aktualizovat KLIND OS a systém" "Restartovat" "Otrevrit linux prikazovy radek")
+    optio=("Spustit KLIND OS" "Aktualizovat KLIND OS a systém" "Restartovat" "Otevřít linux příkazový řádek")
     options=()
     for option in "${optio[@]}"; do
         options+=("$option" "")
@@ -32,7 +32,7 @@ function main() {
         "Restartovat")
             reboot
             ;;
-        "Otrevrit linux prikazovy radek")
+        "Otevřít linux příkazový řádek")
             exit
             ;;
         *)
