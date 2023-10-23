@@ -138,9 +138,10 @@ pacman -S --noconfirm grub
 grub-install --target=i386-pc "$selected_disk"  
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups
+pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman
 systemctl enable NetworkManager
 systemctl enable cups
+systemctl enable bluetooth
 
 touch ~/.xinitrc
 echo "exec /usr/bin/pipewire &" >> ~/.xinitrc
