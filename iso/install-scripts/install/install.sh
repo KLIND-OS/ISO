@@ -95,7 +95,7 @@ drivers_options=()
 for option in "${drivers[@]}"; do
     drivers_options+=("$option" "")
 done
-driver=$(dialog --nocancel --menu "Vyberte ovladač:" 10 40 3 "${drivers_options[@]}" 3>&1 1>&2 2>&3)
+driver=$(dialog --nocancel --menu "Vyberte ovladač pro grafickou kartu:" 10 40 3 "${drivers_options[@]}" 3>&1 1>&2 2>&3)
 
 case "$driver" in
     "Intel")
