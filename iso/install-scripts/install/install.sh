@@ -125,6 +125,8 @@ hwclock --systohc
 mv /etc/locale.gen /etc/locale.gen.backup
 touch /etc/locale.gen
 echo "cs_CZ.UTF-8 UTF-8" >> /etc/locale.gen
+mv /etc/locale.conf /etc/locale.conf.backup
+echo "LANG=cs_CZ.UTF-8" >> /etc/locale.conf
 locale-gen
 
 echo $hostname >> /etc/hostname
