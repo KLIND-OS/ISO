@@ -40,13 +40,23 @@ function select_disk_dialog() {
 function partition_disk() {
     local disk="$1"
     wipefs -a "$disk"
-    parted "$disk" mklabel msdos  
-    parted -a opt "$disk" mkpart primary ext4 1MiB 500MiB
-    parted -a opt "$disk" mkpart primary ext4 500MiB 100%  
-    mkfs.ext4 -F "${disk}1"
-    mkfs.ext4 -F "${disk}2"
+    if [ -d "/sys/firmware/efi" ]; then
+        parted "$disk" mklabel gpt  
+        parted -a opt "$disk" mkpart primary fat32 1MiB 551MiB
+        parted -a opt "$disk" set 1 boot on
+        parted -a opt "$disk" mkpart primary ext4 551MiB 100%  
+        mkfs.fat -F32 "${disk}1"
+        mkfs.ext4 -F "${disk}2"
+    else
+        parted "$disk" mklabel msdos  
+        parted -a opt "$disk" mkpart primary ext4 1MiB 500MiB
+        parted -a opt "$disk" mkpart primary ext4 500MiB 100%  
+        mkfs.ext4 -F "${disk}1"
+        mkfs.ext4 -F "${disk}2"
+    fi
 }
 
+locale-gen
 
 selected_disk=$(select_disk_dialog)
 
@@ -110,9 +120,20 @@ esac
 
 partition_disk "$selected_disk"
 
-mount "${selected_disk}2" /mnt
-mkdir /mnt/boot
-mount "${selected_disk}1" /mnt/boot
+UEFI="no"
+if [ -d "/sys/firmware/efi" ]; then
+    UEFI="yes"
+fi
+
+if [ "$UEFI" == "yes" ]; then
+    mount "${selected_disk}2" /mnt
+    mkdir -p /mnt/boot/efi
+    mount "${selected_disk}1" /mnt/boot/efi
+else
+    mount "${selected_disk}2" /mnt
+    mkdir /mnt/boot
+    mount "${selected_disk}1" /mnt/boot
+fi
 
 
 pacstrap /mnt base linux linux-firmware 
@@ -125,6 +146,8 @@ hwclock --systohc
 mv /etc/locale.gen /etc/locale.gen.backup
 touch /etc/locale.gen
 echo "cs_CZ.UTF-8 UTF-8" >> /etc/locale.gen
+mv /etc/locale.conf /etc/locale.conf.backup
+echo "LANG=cs_CZ.UTF-8" >> /etc/locale.conf
 locale-gen
 
 echo $hostname >> /etc/hostname
@@ -134,8 +157,12 @@ echo "::1          localhost" >> /etc/hosts
 echo "127.0.1.1    $hostname.localdomain    $hostname" >> /etc/hosts
 echo -e "$root_pass\n$root_pass" | passwd root
 
-pacman -S --noconfirm grub
-grub-install --target=i386-pc "$selected_disk"  
+pacman -S --noconfirm grub efibootmgr dosfstools os-prober mtools
+if [ "$UEFI" == "yes" ]; then
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub --recheck
+else
+    grub-install --target=i386-pc "$selected_disk"
+fi
 cp /etc/default/grub /etc/default/grub.backup
 
 pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman
