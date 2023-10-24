@@ -30,7 +30,7 @@ function select_disk_dialog() {
         fi
     done < <(lsblk -rno NAME,TYPE | awk '$2=="disk" {print "/dev/"$1}')
 
-    local selected_disk_info=$(dialog --nocancel --menu "Vyberte disk na ktery chcete nainstalovat KLIND OS:" 12 80 4 "${dialog_options[@]}" 3>&1 1>&2 2>&3)
+    local selected_disk_info=$(dialog --nocancel --menu "Vyberte disk na který chcete nainstalovat KLIND OS:" 12 80 4 "${dialog_options[@]}" 3>&1 1>&2 2>&3)
 
     local selected_disk=$(echo "$selected_disk_info" | cut -d' ' -f1)
     
@@ -62,7 +62,7 @@ cities_options=()
 for option in "${cities[@]}"; do
     cities_options+=("$option" "")
 done
-city=$(dialog --nocancel --menu "Vyberte mesto:" 10 40 3 "${cities_options[@]}" 3>&1 1>&2 2>&3)
+city=$(dialog --nocancel --menu "Vyberte město:" 10 40 3 "${cities_options[@]}" 3>&1 1>&2 2>&3)
 
 function select_hostname() {
     if [[ $1 == true ]]; then
@@ -124,7 +124,9 @@ hwclock --systohc
 
 mv /etc/locale.gen /etc/locale.gen.backup
 touch /etc/locale.gen
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "cs_CZ.UTF-8 UTF-8" >> /etc/locale.gen
+mv /etc/locale.conf /etc/locale.conf.backup
+echo "LANG=cs_CZ.UTF-8" >> /etc/locale.conf
 locale-gen
 
 echo $hostname >> /etc/hostname
@@ -170,6 +172,8 @@ rm -rf /mnt/etc/cups/cupsd.conf
 cp ~/config/cupsd.conf /mnt/etc/cups
 touch /mnt/root/scripts_run.json
 echo "[]" >> /mnt/root/scripts_run.json
+mv /mnt/etc/vconsole.conf /mnt/etc/vconsole.conf.backup
+cp ~/config/vconsole.conf /mnt/etc/vconsole.conf
 
 arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
