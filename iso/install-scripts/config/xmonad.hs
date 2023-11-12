@@ -25,7 +25,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ((modm .|. shiftMask, xK_c     ), kill)
 
     , ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-    , ((modm .|. shiftMask, xK_s), spawn "bash /root/selectprogram.sh")
 
     -- Audio keys
     , ((0,                    xF86XK_AudioPlay), spawn "bash /root/scripts/media.sh play-pause")
