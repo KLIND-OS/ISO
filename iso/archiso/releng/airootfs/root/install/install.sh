@@ -1,6 +1,22 @@
 #!/bin/bash
 root_pass="1234"
 
+dialog --title "KLIND OS" --msgbox "Vítejte v instalaci KLIND OS!" 10 30
+      
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
 function select_disk_dialog() {
     local disks=()
     local dialog_options=()
@@ -118,6 +134,19 @@ case "$driver" in
         ;;
 esac
 
+branches_response=$(curl -s https://backend.jzitnik.is-a.dev/klindos/branches/getAll)
+if [ $? -eq 0 ]; then
+  branches=($(echo $branches_response | jq -r '.[]'))
+  branches_options=()
+  for option in "${branches[@]}"; do
+      branches_options+=("$option" "")
+  done
+  branch=$(dialog --nocancel --menu "Vyberte postavení systému chcete používat. Doporučuji 'main' (stable)." 10 40 3 "${branches_options[@]}" 3>&1 1>&2 2>&3)
+else
+  echo "Error: Nepovedlo se získat data z API. Používám výchozí branch: main";
+fi
+
+# Start the script
 partition_disk "$selected_disk"
 
 UEFI="no"
@@ -199,6 +228,8 @@ touch /mnt/root/scripts_run.json
 echo "[]" >> /mnt/root/scripts_run.json
 mv /mnt/etc/vconsole.conf /mnt/etc/vconsole.conf.backup
 cp ~/config/vconsole.conf /mnt/etc/vconsole.conf
+touch /mnt/root/branch
+echo "$branch" >> /mnt/root/branch
 
 arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
