@@ -4,6 +4,7 @@ backendStatusUrl="https://backend.jzitnik.is-a.dev/status"
 backendVersionsUrl="https://backend.jzitnik.is-a.dev/klindos/installScript/supportedVersion"
 backendBranchesUrl="https://backend.jzitnik.is-a.dev/klindos/branches/getAll"
 githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
+root_pass="1234"
 
 
 echo "-> Spouštím KLIND OS instalačni script..."
