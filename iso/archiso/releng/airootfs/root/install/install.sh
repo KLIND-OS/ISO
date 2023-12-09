@@ -1,5 +1,75 @@
 #!/bin/bash
+scriptVersion="1.1"
+backendStatusUrl="https://backend.jzitnik.is-a.dev/status"
+backendVersionsUrl="https://backend.jzitnik.is-a.dev/klindos/installScript/supportedVersion"
+backendBranchesUrl="https://backend.jzitnik.is-a.dev/klindos/branches/getAll"
+githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
 root_pass="1234"
+
+
+echo "-> Spouštím KLIND OS instalačni script..."
+locale-gen
+echo "-> Testuji status všech služeb"
+
+# Check backend
+backendResponse=$(curl -s -o /dev/null -w "%{http_code}" "$backendStatusUrl")
+if [ "$backendResponse" -eq 200 ]; then
+    backendStatus="Backend: \Z2Funguje\Zn"
+else
+    backendStatus="Backend: \Z1Nefunguje\Zn"
+fi
+
+# Check github
+githubResponse=$(curl -s -o /dev/null -w "%{http_code}" "$githubUrl")
+if [ "$githubResponse" -eq 200 ]; then
+    githubResponse="Github: \Z2Funguje\Zn"
+else
+    githubResponse="Github: \Z1Nefunguje\Zn"
+fi
+
+echo "-> Testuji jestli je script aktuální"
+scriptVersionResponse=$(curl -s "$backendVersionsUrl")
+if [[ $scriptVersionResponse =~ ^\[.*\]$ ]]; then
+    array=($(echo "$scriptVersionResponse " | jq -r '.[]'))
+    if [[ " ${array[@]} " =~ " $scriptVersion" ]]; then
+      echo "-> Script je aktuální!"
+    else
+      dialog \
+        --colors \
+        --title "Zastaralý instalační program" \
+        --msgbox "\Z1!!! POZOR !!!\Zn\n\nInstalační program není aktuální!. ISO které používáte je zastaralé a není aktuální. Prosím stáhněte si novou verzi instalačního souboru.\nVerze kterou používáte: \Z1$scriptVersion\Zn" \
+        10 50
+      printf "\n\n\nInfo:\nPro vypnutí počítače napište 'poweroff'.\nPro restart napište 'reboot'."
+      exit 1
+    fi
+else
+    echo "-> Chyba: Invalidní JSON odpověd od backendu!"
+    echo "-> Pozor: Nebylo možné zjistit jestli je script aktuální!"
+    echo "-> Script nemusí fungovat správně!"
+    echo "-> Čekám 5 sekund..."
+    sleep 5
+fi
+
+dialog \
+  --colors \
+  --title "KLIND OS" \
+  --msgbox "Vítejte v instalaci KLIND OS.\n\n\Z1!!! UPOZORNĚNÍ !!!\Zn\nTento script nemusí fungovat správně.\nPři instalaci doporučuji odpojit všechny ostatní disky kromě disku s ISO souborem a disku na který chcete nainstalovat KLIND OS.\n\nStatus služeb:\n$backendStatus\n$githubResponse\n\nInformace:\nVerze scriptu: $scriptVersion \Z2(aktuální)\Zn\n\n\nKLIND OS Installation script.\nNapsal Jakub Žitník. Napsáno v bash.\nGithub: jzitnik.is-a.dev/link/klindos-install-script" \
+  25 60
+
+     
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
 
 function select_disk_dialog() {
     local disks=()
@@ -56,7 +126,6 @@ function partition_disk() {
     fi
 }
 
-locale-gen
 
 selected_disk=$(select_disk_dialog)
 
@@ -66,13 +135,13 @@ regions_options=()
 for option in "${regions[@]}"; do
     regions_options+=("$option" "")
 done
-region=$(dialog --nocancel --menu "Vyberte region:" 10 40 3 "${regions_options[@]}" 3>&1 1>&2 2>&3)
+region=$(dialog --nocancel --menu "Vyberte region:" 30 40 3 "${regions_options[@]}" 3>&1 1>&2 2>&3)
 cities=( $(ls /usr/share/zoneinfo/$region/) )
 cities_options=()
 for option in "${cities[@]}"; do
     cities_options+=("$option" "")
 done
-city=$(dialog --nocancel --menu "Vyberte město:" 10 40 3 "${cities_options[@]}" 3>&1 1>&2 2>&3)
+city=$(dialog --nocancel --menu "Vyberte město:" 30 40 3 "${cities_options[@]}" 3>&1 1>&2 2>&3)
 
 function select_hostname() {
     if [[ $1 == true ]]; then
@@ -95,7 +164,7 @@ drivers_options=()
 for option in "${drivers[@]}"; do
     drivers_options+=("$option" "")
 done
-driver=$(dialog --nocancel --menu "Vyberte ovladač pro grafickou kartu:" 10 40 3 "${drivers_options[@]}" 3>&1 1>&2 2>&3)
+driver=$(dialog --nocancel --menu "Vyberte ovladač pro grafickou kartu:" 15 40 3 "${drivers_options[@]}" 3>&1 1>&2 2>&3)
 
 case "$driver" in
     "Intel")
@@ -118,8 +187,25 @@ case "$driver" in
         ;;
 esac
 
+echo "-> Získávám informace o branches z backendu!"
+branches_response=$(curl -s "$backendBranchesUrl" )
+if [ $? -eq 0 ]; then
+  branches=($(echo $branches_response | jq -r '.[]'))
+  branches_options=()
+  for option in "${branches[@]}"; do
+      branches_options+=("$option" "")
+  done
+  branch=$(dialog --nocancel --menu "Vyberte postavení systému chcete používat. Doporučuji 'main' (stable)." 10 40 3 "${branches_options[@]}" 3>&1 1>&2 2>&3)
+else
+  echo "-> Error: Nepovedlo se získat data z API. Používám výchozí branch: main";
+fi
+
+# Start the script
+
+# Make the partitions
 partition_disk "$selected_disk"
 
+# Test UEFI
 UEFI="no"
 if [ -d "/sys/firmware/efi" ]; then
     UEFI="yes"
@@ -135,7 +221,7 @@ else
     mount "${selected_disk}1" /mnt/boot
 fi
 
-
+# Install basic packages
 pacstrap /mnt base linux linux-firmware 
 
 
@@ -178,6 +264,7 @@ echo "exec xmonad" >> ~/.xinitrc
 
 EOF
 
+# Copy and make all the needed files
 mkdir /mnt/root/klindos-server
 cp ~/scripts/startup.sh /mnt/root/
 cp ~/scripts/selectprogram.sh /mnt/root/
@@ -199,6 +286,8 @@ touch /mnt/root/scripts_run.json
 echo "[]" >> /mnt/root/scripts_run.json
 mv /mnt/etc/vconsole.conf /mnt/etc/vconsole.conf.backup
 cp ~/config/vconsole.conf /mnt/etc/vconsole.conf
+touch /mnt/root/branch
+echo "$branch" >> /mnt/root/branch
 
 arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -221,4 +310,4 @@ genfstab -U /mnt >> /mnt/etc/fstab
 sed -i '/\/dev\/zram/d' /mnt/etc/fstab
 umount -R /mnt
 
-echo "KLIND OS byl nainstalován! Napište 'reboot' pro restart"
+echo "-> KLIND OS byl nainstalován! Napište 'reboot' pro restart"
