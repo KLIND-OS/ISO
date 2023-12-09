@@ -195,7 +195,7 @@ if [ $? -eq 0 ]; then
   for option in "${branches[@]}"; do
       branches_options+=("$option" "")
   done
-  branch=$(dialog --nocancel --menu "Vyberte postavení systému chcete používat. Doporučuji 'main' (stable)." 10 40 3 "${branches_options[@]}" 3>&1 1>&2 2>&3)
+  branch=$(dialog --nocancel --menu "Vyberte postavení systému chcete používat. Doporučuji 'main' (stable)." 15 40 3 "${branches_options[@]}" 3>&1 1>&2 2>&3)
 else
   echo "-> Error: Nepovedlo se získat data z API. Používám výchozí branch: main";
 fi
