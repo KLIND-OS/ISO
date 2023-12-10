@@ -195,7 +195,7 @@ if [ $? -eq 0 ]; then
   for option in "${branches[@]}"; do
       branches_options+=("$option" "")
   done
-  branch=$(dialog --nocancel --menu "Vyberte postavení systému chcete používat. Doporučuji 'main' (stable)." 10 40 3 "${branches_options[@]}" 3>&1 1>&2 2>&3)
+  branch=$(dialog --nocancel --menu "Vyberte postavení systému chcete používat. Doporučuji 'main' (stable)." 15 40 3 "${branches_options[@]}" 3>&1 1>&2 2>&3)
 else
   echo "-> Error: Nepovedlo se získat data z API. Používám výchozí branch: main";
 fi
@@ -251,7 +251,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman
+pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman
 systemctl enable NetworkManager
 systemctl enable cups
 systemctl enable bluetooth
