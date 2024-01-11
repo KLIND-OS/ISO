@@ -267,7 +267,6 @@ EOF
 # Copy and make all the needed files
 mkdir /mnt/root/klindos-server
 cp ~/scripts/startup.sh /mnt/root/
-cp ~/scripts/selectprogram.sh /mnt/root/
 cp ~/scripts/server.js /mnt/root/klindos-server
 mkdir /mnt/root/scripts
 cp ~/scripts/media.sh /mnt/root/scripts
