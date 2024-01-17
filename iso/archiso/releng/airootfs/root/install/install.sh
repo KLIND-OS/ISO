@@ -297,7 +297,7 @@ cp ~/scripts/startUI.sh /mnt/root/
 mkdir /mnt/root/config
 
 if [ "$useDev" = true ]; then
-  touch /mnt/root/config/iseDev
+  touch /mnt/root/config/useDev
 fi
 
 arch-chroot /mnt <<EOF
