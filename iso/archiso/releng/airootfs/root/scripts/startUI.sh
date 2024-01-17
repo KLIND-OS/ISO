@@ -3,7 +3,7 @@
 
 if [ -e "/root/config/useDev" ]; then
   while true; do
-    (cd /root/KLIND-OS-Client && npm start)
+    (cd /root/KLIND-OS-Client && npm startNoSandbox)
   done
 else
   while true; do
