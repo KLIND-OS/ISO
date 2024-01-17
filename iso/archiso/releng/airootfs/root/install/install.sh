@@ -5,6 +5,7 @@ backendVersionsUrl="https://backend.jzitnik.is-a.dev/klindos/installScript/suppo
 backendBranchesUrl="https://backend.jzitnik.is-a.dev/klindos/branches/getAll"
 githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
 root_pass="1234"
+useDev=false
 
 
 echo "-> Spouštím KLIND OS instalačni script..."
@@ -224,6 +225,11 @@ fi
 # Install basic packages
 pacstrap /mnt base linux linux-firmware 
 
+if [ "$useDev" = true ]; then
+  ADDITIONAL="neovim"
+else
+  ADDITIONAL=""
+fi
 
 arch-chroot /mnt <<EOF
 ln -sf /usr/share/zoneinfo/$region/$city /etc/localtime
@@ -251,7 +257,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman
+pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman $ADDITIONAL
 systemctl enable NetworkManager
 systemctl enable cups
 systemctl enable bluetooth
@@ -287,14 +293,26 @@ mv /mnt/etc/vconsole.conf /mnt/etc/vconsole.conf.backup
 cp ~/config/vconsole.conf /mnt/etc/vconsole.conf
 touch /mnt/root/branch
 echo "$branch" >> /mnt/root/branch
+cp ~/scripts/startUI.sh /mnt/root/
+mkdir /mnt/root/config
+
+if [ "$useDev" = true ]; then
+  touch /mnt/root/config/useDev
+fi
 
 arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
-git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
-(cd /root/KLIND-OS-Client && npm install)
-(cd /root/KLIND-OS-Client && npm run build)
-cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
-rm -rf /root/KLIND-OS-Client
+
+if [ "$useDev" = false ]; then
+  git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+  (cd /root/KLIND-OS-Client && npm install)
+  (cd /root/KLIND-OS-Client && npm run build)
+  cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
+  rm -rf /root/KLIND-OS-Client
+else
+  git clone https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+  (cd /root/KLIND-OS-Client && npm install)
+fi
 
 (cd /root/klindos-server && npm install express)
 xmonad --recompile

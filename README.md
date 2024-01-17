@@ -24,6 +24,6 @@ Server který se používá pro posílání souborů clientovi. Používá se pr
 
 ## Webová stránka
 
-Webová stránka KLIND OS je postavena na Reactu ve ViteJS.
+Webová stránka KLIND OS je vytvořena v NextJS.
 
 [Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Website)
