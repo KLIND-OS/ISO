@@ -137,7 +137,7 @@ for option in "${regions[@]}"; do
     regions_options+=("$option" "")
 done
 region=$(dialog --nocancel --menu "Vyberte region:" 30 40 3 "${regions_options[@]}" 3>&1 1>&2 2>&3)
-cities=( $(ls /usr/share/zoneinfo/$region/) )
+cities=( $(ls /usr/share/zoneinfo/"$region"/) )
 cities_options=()
 for option in "${cities[@]}"; do
     cities_options+=("$option" "")
@@ -191,7 +191,7 @@ esac
 echo "-> Získávám informace o branches z backendu!"
 branches_response=$(curl -s "$backendBranchesUrl" )
 if [ $? -eq 0 ]; then
-  branches=($(echo $branches_response | jq -r '.[]'))
+  branches=($(echo "$branches_response" | jq -r '.[]'))
   branches_options=()
   for option in "${branches[@]}"; do
       branches_options+=("$option" "")
@@ -257,8 +257,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman $ADDITIONAL
-systemctl enable NetworkManager
+pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd systemctl enable NetworkManager
 systemctl enable cups
 systemctl enable bluetooth
 
@@ -282,7 +281,7 @@ touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
-git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
+git clone --depth 1 --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
 rm -rf /mnt/etc/cups/cupsd.conf
@@ -304,13 +303,13 @@ arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
 
 if [ "$useDev" = false ]; then
-  git clone --depth 1 https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+  git clone --depth 1 --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
   (cd /root/KLIND-OS-Client && npm install)
   (cd /root/KLIND-OS-Client && npm run build)
   cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
   rm -rf /root/KLIND-OS-Client
 else
-  git clone https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+  git clone --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
   (cd /root/KLIND-OS-Client && npm install)
 fi
 
