@@ -3,7 +3,7 @@
 
 iso_name="klindos"
 iso_label="KLINDOS_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
-iso_publisher="KLIND OS <https://klindos.jzitnik.is-a.dev>"
+iso_publisher="KLIND OS <https://klindos.jzitnik.dev>"
 iso_application="KLIND OS Live/Rescue CD"
 iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
 install_dir="arch"
