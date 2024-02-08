@@ -25,7 +25,7 @@ jobs:
         run: cd iso/archiso
 
       - name: Install archiso
-        run: sudo pacman -Sy archiso --noconfirm
+        run: pacman -Sy archiso --noconfirm
 
       - name: Set current date as environment variable
         run: echo "DATE=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
