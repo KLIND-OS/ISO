@@ -1,1 +1,3 @@
-sudo mkarchiso -v -w ./output -o ./output releng/
+#!/bin/bash
+
+mkarchiso -v -w ./output -o ./output releng/
