@@ -1,0 +1,35 @@
+name: Build KLIND-OS ISO
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    services:
+      archlinux:
+        image: archlinux:latest
+        options: --privileged
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo pacman -Sy --noconfirm archiso
+        sudo pacman -Sy --noconfirm sudo
+        
+    - name: Build ISO
+      run: |
+        cd iso/archiso
+        sudo ./buildiso.sh
+    
+    - name: Upload ISO as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: archlinux-iso
+        path: iso/archiso/output/*.iso
