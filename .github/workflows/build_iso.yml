@@ -21,19 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Change directory to iso/archiso
+        run: cd iso/archiso
+
+      - name: Install archiso
+        run: sudo pacman -Sy archiso --noconfirm
+
       - name: Set current date as environment variable
         run: echo "DATE=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
-        working-directory: /iso/archiso
 
       - name: Run build-iso script
         run: bash makeiso.bash
-        working-directory: /iso/archiso
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dev == 'true' }}
         with:
-          name: Arch Linux ${{ env.DATE }}
-          path: |
-            /iso/archiso/archlinux-${{ env.DATE }}-x86_64.iso
-            /iso/archiso/CHECKSUMS.txt
+          name: klindos-${{ env.DATE }}-x86_64.iso
+          path: iso/archiso/output/klindos-${{ env.DATE }}-x86_64.iso
