@@ -31,7 +31,7 @@ jobs:
         run: echo "DATE=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
       - name: Run build-iso script
-        run: bash makeiso.bash
+        run: bash makeiso.sh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
