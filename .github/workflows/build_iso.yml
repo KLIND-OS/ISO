@@ -1,35 +1,24 @@
-name: Build KLIND-OS ISO
+name: Build Archiso Image
 
 on:
   push:
     branches:
-      - test
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: arch-latest
     
-    services:
-      archlinux:
-        image: archlinux:latest
-        options: --privileged
-        
     steps:
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v2
-
-    - name: Install dependencies
+      
+    - name: Install Dependencies
       run: |
-        sudo pacman -Sy --noconfirm archiso
-        sudo pacman -Sy --noconfirm sudo
+        sudo pacman -Syu --noconfirm
+        sudo pacman -S --noconfirm archiso
         
-    - name: Build ISO
+    - name: Build Archiso Image
       run: |
         cd iso/archiso
-        sudo ./buildiso.sh
-    
-    - name: Upload ISO as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: archlinux-iso
-        path: iso/archiso/output/*.iso
+        sudo mkarchiso -v -w ../output -o ../output releng/
