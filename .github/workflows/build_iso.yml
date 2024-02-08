@@ -21,17 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Change directory to iso/archiso
-        run: cd iso/archiso
-
       - name: Install archiso
         run: pacman -Sy archiso --noconfirm
+        working-directory: iso/archiso
 
       - name: Set current date as environment variable
         run: echo "DATE=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        working-directory: iso/archiso
 
       - name: Run build-iso script
         run: bash makeiso.sh
+        working-directory: iso/archiso
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
