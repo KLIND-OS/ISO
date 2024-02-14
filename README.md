@@ -27,3 +27,9 @@ Server který se používá pro posílání souborů clientovi. Používá se pr
 Webová stránka KLIND OS je vytvořena v NextJS.
 
 [Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Website)
+
+## Developers installer
+
+Program na instalaci KLIND OS Developers.
+
+[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Dev)
