@@ -1,5 +1,5 @@
 #!/bin/bash
-scriptVersion="1.1"
+scriptVersion="1.2"
 backendStatusUrl="https://backend.jzitnik.dev/status"
 backendVersionsUrl="https://backend.jzitnik.dev/klindos/installScript/supportedVersion"
 backendBranchesUrl="https://backend.jzitnik.dev/klindos/branches/getAll"
@@ -257,7 +257,9 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd systemctl enable NetworkManager
+pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd
+
+systemctl enable NetworkManager
 systemctl enable cups
 systemctl enable bluetooth
 
@@ -284,6 +286,7 @@ cp ~/config/xmonad.hs /mnt/root/.xmonad/
 git clone --depth 1 --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
+cp -r ~/usrfiles-server /mnt/root/
 rm -rf /mnt/etc/cups/cupsd.conf
 cp ~/config/cupsd.conf /mnt/etc/cups
 touch /mnt/root/scripts_run.json
@@ -314,6 +317,7 @@ else
 fi
 
 (cd /root/klindos-server && npm install express)
+(cd /root/usrfiles-server && npm install)
 xmonad --recompile
 mkdir /etc/systemd/system/getty@tty1.service.d/
 touch /etc/systemd/system/getty@tty1.service.d/autologin.conf

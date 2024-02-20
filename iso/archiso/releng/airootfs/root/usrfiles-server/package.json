@@ -1,0 +1,16 @@
+{
+  "name": "klindos-usrfiles-server",
+  "version": "1.0.0",
+  "description": "CND pro uživatelské soubory",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "Jakub Žitník",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
+  }
+}
