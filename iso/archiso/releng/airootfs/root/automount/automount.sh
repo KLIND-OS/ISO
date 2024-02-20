@@ -11,16 +11,19 @@ while true; do
         if [[ "$device" != loop* && "$device" != sr* ]]; then
             if ! [[ " ${connected_drives[@]} " =~ " ${device} " ]]; then
                 connected_drives+=("$device")
-                python ~/automount/automount_fs.py add $device
+                python ~/automount/automount_fs.py add "$device"
                 partitions=($(lsblk -o NAME,TYPE,MOUNTPOINT -nr /dev/"$device" | awk '$2 == "part" && $3 == "" {print $1}'))
 
                 # Mount each partition under /mnt
+                mkdir ~/usrfiles/Devices
+
                 for partition in "${partitions[@]}"; do
                     mount_point="/mnt/$partition"
                     if [ ! -d "$mount_point" ]; then
                         mkdir -p "$mount_point"
                     fi
                     mount "/dev/$partition" "$mount_point"
+                    ln -s "$mount_point" "/root/usrfiles/Devices/$partition"
                 done
             fi
         fi
@@ -36,6 +39,7 @@ while true; do
                     if [ -d "$partition" ]; then
                         umount -f "$partition"
                         rm -rf "$partition"
+                        rm ~/usrfiles/Devices/${drive}*
                     fi
                 done
                 connected_drives=("${connected_drives[@]/$drive}")
