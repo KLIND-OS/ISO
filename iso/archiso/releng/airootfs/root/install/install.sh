@@ -4,6 +4,7 @@ backendStatusUrl="https://backend.jzitnik.dev/status"
 backendVersionsUrl="https://backend.jzitnik.dev/klindos/installScript/supportedVersion"
 backendBranchesUrl="https://backend.jzitnik.dev/klindos/branches/getAll"
 githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
+googleUrl="https://google.com"
 root_pass="1234"
 useDev=false
 
@@ -11,6 +12,13 @@ useDev=false
 echo "-> Spouštím KLIND OS instalačni script..."
 locale-gen
 echo "-> Testuji status všech služeb"
+
+# Check internet
+internetResponse=$(curl -s -o /dev/null -w "%{http_code}" "$googleUrl")
+if [ "$internetResponse" != 200 ]; then
+  source ~/install/setupinternet.sh
+  exit
+fi
 
 # Check backend
 backendResponse=$(curl -s -o /dev/null -w "%{http_code}" "$backendStatusUrl")
