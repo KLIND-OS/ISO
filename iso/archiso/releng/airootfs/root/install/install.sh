@@ -4,7 +4,7 @@ backendStatusUrl="https://backend.jzitnik.dev/status"
 backendVersionsUrl="https://backend.jzitnik.dev/klindos/installScript/supportedVersion"
 backendBranchesUrl="https://backend.jzitnik.dev/klindos/branches/getAll"
 githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
-googleUrl="https://google.com"
+googleUrl="https://www.google.com"
 root_pass="1234"
 useDev=false
 
@@ -17,7 +17,7 @@ echo "-> Testuji status všech služeb"
 internetResponse=$(curl -s -o /dev/null -w "%{http_code}" "$googleUrl")
 if [ "$internetResponse" != 200 ]; then
   source ~/install/setupinternet.sh
-  exit
+  return
 fi
 
 # Check backend
@@ -291,7 +291,7 @@ touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
-git clone --depth 1 --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
+git clone --depth 1 --branch "$branch" https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
 cp -r ~/usrfiles-server /mnt/root/
@@ -305,6 +305,7 @@ touch /mnt/root/branch
 echo "$branch" >> /mnt/root/branch
 cp ~/scripts/startUI.sh /mnt/root/
 mkdir /mnt/root/config
+cp ~/scripts/closebtn.py /mnt/root/scripts
 
 if [ "$useDev" = true ]; then
   touch /mnt/root/config/useDev
