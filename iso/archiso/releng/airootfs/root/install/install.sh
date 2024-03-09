@@ -306,6 +306,7 @@ echo "$branch" >> /mnt/root/branch
 cp ~/scripts/startUI.sh /mnt/root/
 mkdir /mnt/root/config
 cp ~/scripts/closebtn.py /mnt/root/scripts
+mkdir /mnt/root/usrfiles
 
 if [ "$useDev" = true ]; then
   touch /mnt/root/config/useDev
