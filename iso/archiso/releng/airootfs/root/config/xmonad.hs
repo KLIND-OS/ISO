@@ -18,6 +18,7 @@ startup = do
     spawnOnce "bash /root/scripts/mirror.sh"
     spawnOnce "picom"
     spawnOnce "bash /root/startUI.sh"
+    spawnOnce "numlockx on"
 
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm, button1), (\_ -> return ()))
