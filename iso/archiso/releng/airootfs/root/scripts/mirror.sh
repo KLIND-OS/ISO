@@ -3,6 +3,7 @@
 primary_display=""
 update_mirror() {
     connected_displays=($(xrandr --query | grep " connected" | awk '{print $1}'))
+    xrandr --auto
     if [ ${#connected_displays[@]} -lt 2 ]; then
         return
     fi
@@ -17,11 +18,14 @@ update_mirror() {
             xrandr --output "$display" --same-as "$primary_display"
         fi
     done
-    xrandr --auto
 }
 
 update_mirror
 while true; do
-    inotifywait -e modify,create,delete /sys/class/drm/*/status
-    update_mirror
+    current_displays=$(xrandr --query | grep " connected" | awk '{print $1}')
+    if [ "$current_displays" != "$prev_displays" ]; then
+        update_mirror
+        prev_displays="$current_displays"
+    fi
+    sleep 2
 done
