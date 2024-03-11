@@ -1,35 +1,19 @@
-# KLIND OS - Hlavní repozitář [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/iof2.svg)](https://betteruptime.com/?utm_source=status_badge)
+# KLIND OS Instalační ISO soubor a script
 
-KLIND OS je Arch Linux based operační systém. Grafické rozhraní je nepsáno v JavaScriptu. Tento operační systém není vhodný pro denní použití. Tento software je absolutně bez záruky.
+Toto je repozitář který obsahuje instalační script a generátor ISO souboru.
 
-# Repozitáře
+# Základní informace
 
-Seznam všech repozitářů KLIND OS
+Instalační script se nachází ve složce /iso/archiso/releng/airootfs/root/`
 
-## ISO instalační soubor (tento repozitář)
+Při spuštení instalačního systému se automaticky uživatel přihlásí do `root` uživatele a poté se spustí bash script který se nachází ve složce `install`. Script na automatické spuštění se nachází v souboru `.bash_profile` ve složce `/iso/archiso/releng/airootfs/root/`.
 
-Instalační disk je ISO soubor který obsahuje instalační script pro KLIND OS na Arch Linuxu. [Více info...](README-ISO.md)
+# Generování iso souboru
 
-## Client
+Pokud chcete generovat ISO soubor musíte být na operačním systému Arch Linux. (nebo takhle, asi nemusíte ale mám to otestované pouze v Arch Linuxu) Poté si stáhnete program archiso pomocí
 
-Client je program který spouší KLIND OS (jako webová stránka) v programu. Client je postavený v electronu.
+```shell
+sudo pacman -S archiso
+```
 
-[Zobrazit repozitář](https://github.com/KLIND-OS/Client)
-
-## Server
-
-Server který se používá pro posílání souborů clientovi. Používá se protokol http na localhostu na portu 10000. V tomto repozitáři je hlavní kód KLIND OS.
-
-[Zobrazit repozitář](https://github.com/KLIND-OS/Server)
-
-## Webová stránka
-
-Webová stránka KLIND OS je vytvořena v NextJS.
-
-[Zobrazit repozitář](https://github.com/KLIND-OS/Website)
-
-## Developers installer
-
-Program na instalaci KLIND OS Developers.
-
-[Zobrazit repozitář](https://github.com/KLIND-OS/Dev)
+Následně v terminálu spusťte soubor `makeiso.sh`. Následně iso soubor bude ve složce `output`.
