@@ -3,7 +3,7 @@ scriptVersion="1.2"
 backendStatusUrl="https://backend.jzitnik.dev/status"
 backendVersionsUrl="https://backend.jzitnik.dev/klindos/installScript/supportedVersion"
 backendBranchesUrl="https://backend.jzitnik.dev/klindos/branches/getAll"
-githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
+githubUrl="https://github.com/KLIND-OS/Server"
 googleUrl="https://www.google.com"
 root_pass="1234"
 useDev=false
@@ -265,7 +265,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd ntfs-3g acpi
+pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd ntfs-3g acpi numlockx
 
 systemctl enable NetworkManager
 systemctl enable cups
@@ -291,7 +291,7 @@ touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
-git clone --depth 1 --branch "$branch" https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
+git clone --depth 1 --branch "$branch" https://github.com/KLIND-OS/Server /mnt/root/klindos-server/data
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
 cp -r ~/usrfiles-server /mnt/root/
@@ -307,6 +307,8 @@ cp ~/scripts/startUI.sh /mnt/root/
 mkdir /mnt/root/config
 cp ~/scripts/closebtn.py /mnt/root/scripts
 mkdir /mnt/root/usrfiles
+cp ~/config/bashrc.sh /mnt/root/.bashrc
+cp -r ~/bin /mnt/root/bin
 
 if [ "$useDev" = true ]; then
   touch /mnt/root/config/useDev
@@ -316,13 +318,13 @@ arch-chroot /mnt <<EOF
 grub-mkconfig -o /boot/grub/grub.cfg
 
 if [ "$useDev" = false ]; then
-  git clone --depth 1 --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+  git clone --depth 1 --branch $branch https://github.com/KLIND-OS/Client /root/KLIND-OS-Client
   (cd /root/KLIND-OS-Client && npm install)
   (cd /root/KLIND-OS-Client && npm run build)
   cp /root/KLIND-OS-Client/dist/*.AppImage /root/client.AppImage
   rm -rf /root/KLIND-OS-Client
 else
-  git clone --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Client /root/KLIND-OS-Client
+  git clone --branch $branch https://github.com/KLIND-OS/Client /root/KLIND-OS-Client
   (cd /root/KLIND-OS-Client && npm install)
 fi
 
@@ -334,6 +336,8 @@ touch /etc/systemd/system/getty@tty1.service.d/autologin.conf
 echo "[Service]" >> /etc/systemd/system/getty@tty1.service.d/autologin.conf
 echo "ExecStart=" >> /etc/systemd/system/getty@tty1.service.d/autologin.conf
 echo "ExecStart=-/sbin/agetty --autologin root --noclear %I \$TERM" >> /etc/systemd/system/getty@tty1.service.d/autologin.conf
+
+chmod +x ~/bin/close
 EOF
 
 genfstab -U /mnt >> /mnt/etc/fstab

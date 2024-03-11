@@ -14,22 +14,22 @@ Instalační disk je ISO soubor který obsahuje instalační script pro KLIND OS
 
 Client je program který spouší KLIND OS (jako webová stránka) v programu. Client je postavený v electronu.
 
-[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Client)
+[Zobrazit repozitář](https://github.com/KLIND-OS/Client)
 
 ## Server
 
 Server který se používá pro posílání souborů clientovi. Používá se protokol http na localhostu na portu 10000. V tomto repozitáři je hlavní kód KLIND OS.
 
-[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Server)
+[Zobrazit repozitář](https://github.com/KLIND-OS/Server)
 
 ## Webová stránka
 
 Webová stránka KLIND OS je vytvořena v NextJS.
 
-[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Website)
+[Zobrazit repozitář](https://github.com/KLIND-OS/Website)
 
 ## Developers installer
 
 Program na instalaci KLIND OS Developers.
 
-[Zobrazit repozitář](https://github.com/JZITNIK-github/KLIND-OS-Dev)
+[Zobrazit repozitář](https://github.com/KLIND-OS/Dev)

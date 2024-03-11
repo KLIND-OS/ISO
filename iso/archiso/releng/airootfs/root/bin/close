@@ -1,0 +1,4 @@
+pkill xmonad &
+pkill -f startUI.sh &
+pkill -f mirror.sh &
+pkill -f automount.sh

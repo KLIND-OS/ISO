@@ -1,7 +1,7 @@
 #!/bin/bash
 
 keyboard() {
-    while [ $counter -lt 10 ]; do
+    while true; do
         setxkbmap cz
         sleep 180
     done
