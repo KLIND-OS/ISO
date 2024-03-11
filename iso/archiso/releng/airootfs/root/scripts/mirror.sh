@@ -17,13 +17,10 @@ update_mirror() {
             xrandr --output "$display" --same-as "$primary_display"
         fi
     done
-
+    xrandr --auto
 }
 
-# Initial update
 update_mirror
-
-# Monitor for changes in connected displays using inotifywait
 while true; do
     inotifywait -e modify,create,delete /sys/class/drm/*/status
     update_mirror
