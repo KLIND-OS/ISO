@@ -27,5 +27,5 @@ while true; do
         update_mirror
         prev_displays="$current_displays"
     fi
-    sleep 2  # Adjust the sleep duration as needed
+    sleep 2
 done

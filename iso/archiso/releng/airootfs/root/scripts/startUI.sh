@@ -1,6 +1,13 @@
 #!/bin/bash
 
+keyboard() {
+    while [ $counter -lt 10 ]; do
+        setxkbmap cz
+        sleep 180
+    done
+}
 
+keyboard &
 if [ -e "/root/config/useDev" ]; then
   while true; do
     (cd /root/KLIND-OS-Client && npm startNoSandbox)

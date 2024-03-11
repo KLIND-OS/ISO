@@ -4,6 +4,7 @@ backendStatusUrl="https://backend.jzitnik.dev/status"
 backendVersionsUrl="https://backend.jzitnik.dev/klindos/installScript/supportedVersion"
 backendBranchesUrl="https://backend.jzitnik.dev/klindos/branches/getAll"
 githubUrl="https://github.com/JZITNIK-github/KLIND-OS-Server"
+googleUrl="https://www.google.com"
 root_pass="1234"
 useDev=false
 
@@ -11,6 +12,13 @@ useDev=false
 echo "-> Spouštím KLIND OS instalačni script..."
 locale-gen
 echo "-> Testuji status všech služeb"
+
+# Check internet
+internetResponse=$(curl -s -o /dev/null -w "%{http_code}" "$googleUrl")
+if [ "$internetResponse" != 200 ]; then
+  source ~/install/setupinternet.sh
+  return
+fi
 
 # Check backend
 backendResponse=$(curl -s -o /dev/null -w "%{http_code}" "$backendStatusUrl")
@@ -257,7 +265,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd
+pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd ntfs-3g acpi
 
 systemctl enable NetworkManager
 systemctl enable cups
@@ -283,7 +291,7 @@ touch /mnt/root/.bash_profile
 echo "bash ~/startup.sh" >> /mnt/root/.bash_profile
 mkdir /mnt/root/.xmonad
 cp ~/config/xmonad.hs /mnt/root/.xmonad/
-git clone --depth 1 --branch $branch https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
+git clone --depth 1 --branch "$branch" https://github.com/JZITNIK-github/KLIND-OS-Server /mnt/root/klindos-server/data
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
 cp -r ~/usrfiles-server /mnt/root/
@@ -297,6 +305,8 @@ touch /mnt/root/branch
 echo "$branch" >> /mnt/root/branch
 cp ~/scripts/startUI.sh /mnt/root/
 mkdir /mnt/root/config
+cp ~/scripts/closebtn.py /mnt/root/scripts
+mkdir /mnt/root/usrfiles
 
 if [ "$useDev" = true ]; then
   touch /mnt/root/config/useDev
