@@ -18,6 +18,8 @@ update_mirror() {
             xrandr --output "$display" --same-as "$primary_display"
         fi
     done
+
+    xrandr --auto
 }
 
 update_mirror
