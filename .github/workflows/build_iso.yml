@@ -29,8 +29,14 @@ jobs:
         run: bash makeiso.sh
         working-directory: iso/archiso
 
-      - name: Upload artifact
+      - name: ISO soubor
         uses: actions/upload-artifact@v3
         with:
           name: KLIND OS ISO soubor
-          path: iso/archiso/output/klindos-*.iso
+          path: iso/archiso/final/KLINDOS.iso
+
+      - name: Sha256 soubor
+        uses: actions/upload-artifact@v3
+        with:
+          name: KLIND OS ISO sha256 soubor
+          path: iso/archiso/final/KLINDOS.iso.sha256
