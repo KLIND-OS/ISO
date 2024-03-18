@@ -330,6 +330,8 @@ fi
 
 (cd /root/klindos-server && npm install express)
 (cd /root/usrfiles-server && npm install)
+mkdir /root/packages
+(cd /root/packages && npm init -y)
 xmonad --recompile
 mkdir /etc/systemd/system/getty@tty1.service.d/
 touch /etc/systemd/system/getty@tty1.service.d/autologin.conf
