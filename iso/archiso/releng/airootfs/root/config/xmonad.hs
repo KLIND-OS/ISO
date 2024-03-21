@@ -26,6 +26,9 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, button3), (\_ -> return ()))
     ]
 
+maimsave = spawn "maim -s ~/usrfiles/$(date +%Y-%m-%d_%H-%M-%S).png && python ~/scripts/sendMessageToUI.py 'spawnNotification(\"Screenshot\", \"Screenshot byl vytvořen a uložen!\")'"
+
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
     ((modm .|. shiftMask, xK_c     ), kill)
@@ -39,6 +42,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0,                    xF86XK_AudioRaiseVolume), spawn "bash /root/scripts/media.sh up")
     , ((0,                    xF86XK_AudioLowerVolume), spawn "bash /root/scripts/media.sh down")
     , ((0,                    xF86XK_AudioMute), spawn "bash /root/scripts/media.sh mute")
+
+    -- Screenshot
+    , ((0,                    xK_Print), spawn maimsave)
+
+
     ]
 
 main = xmonad $ desktopConfig
