@@ -44,7 +44,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0,                    xF86XK_AudioMute), spawn "bash /root/scripts/media.sh mute")
 
     -- Screenshot
-    , ((0,                    xK_Print), spawn maimsave)
+    , ((0,                    xK_Print), maimsave)
 
 
     ]
