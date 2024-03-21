@@ -17,7 +17,7 @@ class HelloWorld(Gtk.EventBox):
         self.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(1, 1, 1, 0.5))
 
 def on_window_clicked(widget, event):
-    command = "pkill -f" + program
+    command = "pkill -f " + program
     subprocess.call(command, shell=True)
     sys.exit()
 
