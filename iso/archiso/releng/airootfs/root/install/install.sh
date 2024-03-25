@@ -265,7 +265,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd ntfs-3g acpi numlockx
+pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd ntfs-3g acpi numlockx xf86-input-synaptics maim
 
 systemctl enable NetworkManager
 systemctl enable cups
@@ -309,6 +309,7 @@ cp ~/scripts/closebtn.py /mnt/root/scripts
 mkdir /mnt/root/usrfiles
 cp ~/config/bashrc.sh /mnt/root/.bashrc
 cp -r ~/bin /mnt/root/bin
+cp ~/config/70-synaptics.conf /mnt/etc/xorg.conf.d/70-synaptics.conf
 
 if [ "$useDev" = true ]; then
   touch /mnt/root/config/useDev
@@ -330,6 +331,8 @@ fi
 
 (cd /root/klindos-server && npm install express)
 (cd /root/usrfiles-server && npm install)
+mkdir /root/packages
+(cd /root/packages && npm init -y)
 xmonad --recompile
 mkdir /etc/systemd/system/getty@tty1.service.d/
 touch /etc/systemd/system/getty@tty1.service.d/autologin.conf
