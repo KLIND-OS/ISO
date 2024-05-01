@@ -295,6 +295,7 @@ git clone --depth 1 --branch "$branch" https://github.com/KLIND-OS/Server /mnt/r
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
 cp -r ~/usrfiles-server /mnt/root/
+cp -r ~/appdata-server /mnt/root/
 rm -rf /mnt/etc/cups/cupsd.conf
 cp ~/config/cupsd.conf /mnt/etc/cups
 touch /mnt/root/scripts_run.json
@@ -331,6 +332,7 @@ fi
 
 (cd /root/klindos-server && npm install express)
 (cd /root/usrfiles-server && npm install)
+(cd /root/appdata-server && npm install)
 mkdir /root/packages
 (cd /root/packages && npm init -y)
 xmonad --recompile
