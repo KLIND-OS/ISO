@@ -265,7 +265,7 @@ else
 fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueman iwd ntfs-3g acpi numlockx xf86-input-synaptics maim unzip zip
+pacman -S --noconfirm $DRI $ADDITIONAL nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueberry iwd ntfs-3g acpi numlockx xf86-input-synaptics maim unzip zip
 
 systemctl enable NetworkManager
 systemctl enable cups
@@ -295,6 +295,7 @@ git clone --depth 1 --branch "$branch" https://github.com/KLIND-OS/Server /mnt/r
 cp ~/config/grub /mnt/etc/default/grub
 cp -r ~/automount /mnt/root/
 cp -r ~/usrfiles-server /mnt/root/
+cp -r ~/appdata-server /mnt/root/
 rm -rf /mnt/etc/cups/cupsd.conf
 cp ~/config/cupsd.conf /mnt/etc/cups
 touch /mnt/root/scripts_run.json
@@ -309,6 +310,7 @@ cp ~/scripts/closebtn.py /mnt/root/scripts
 mkdir /mnt/root/usrfiles
 cp ~/config/bashrc.sh /mnt/root/.bashrc
 cp -r ~/bin /mnt/root/bin
+mkdir /mnt/etc/xorg.conf.d/
 cp ~/config/70-synaptics.conf /mnt/etc/xorg.conf.d/70-synaptics.conf
 
 if [ "$useDev" = true ]; then
@@ -331,6 +333,7 @@ fi
 
 (cd /root/klindos-server && npm install express)
 (cd /root/usrfiles-server && npm install)
+(cd /root/appdata-server && npm install)
 mkdir /root/packages
 (cd /root/packages && npm init -y)
 xmonad --recompile
