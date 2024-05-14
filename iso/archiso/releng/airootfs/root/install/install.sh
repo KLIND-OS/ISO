@@ -310,8 +310,8 @@ cp ~/scripts/closebtn.py /mnt/root/scripts
 mkdir /mnt/root/usrfiles
 cp ~/config/bashrc.sh /mnt/root/.bashrc
 cp -r ~/bin /mnt/root/bin
-mkdir /mnt/etc/xorg.conf.d/
-cp ~/config/70-synaptics.conf /mnt/etc/xorg.conf.d/70-synaptics.conf
+cp ~/config/70-synaptics.conf /mnt/etc/X11/xorg.conf.d/70-synaptics.conf
+mkdir /mnt/root/appdata
 
 if [ "$useDev" = true ]; then
   touch /mnt/root/config/useDev
