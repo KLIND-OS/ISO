@@ -1,8 +1,7 @@
 #!/bin/bash
 scriptVersion="1.2"
-backendStatusUrl="https://backend.jzitnik.dev/status"
-backendVersionsUrl="https://backend.jzitnik.dev/klindos/installScript/supportedVersion"
-backendBranchesUrl="https://backend.jzitnik.dev/klindos/branches/getAll"
+backendVersionsUrl="https://klindos.jzitnik.dev/api/installscript/supportedversion"
+backendBranchesUrl="https://klindos.jzitnik.dev/api/branches"
 githubUrl="https://github.com/KLIND-OS/Server"
 googleUrl="https://www.google.com"
 root_pass="1234"
@@ -18,14 +17,6 @@ internetResponse=$(curl -s -o /dev/null -w "%{http_code}" "$googleUrl")
 if [ "$internetResponse" != 200 ]; then
   source ~/install/setupinternet.sh
   return
-fi
-
-# Check backend
-backendResponse=$(curl -s -o /dev/null -w "%{http_code}" "$backendStatusUrl")
-if [ "$backendResponse" -eq 200 ]; then
-    backendStatus="Backend: \Z2Funguje\Zn"
-else
-    backendStatus="Backend: \Z1Nefunguje\Zn"
 fi
 
 # Check github
@@ -62,7 +53,7 @@ fi
 dialog \
   --colors \
   --title "KLIND OS" \
-  --msgbox "Vítejte v instalaci KLIND OS.\n\n\Z1!!! UPOZORNĚNÍ !!!\Zn\nTento script nemusí fungovat správně.\nPři instalaci doporučuji odpojit všechny ostatní disky kromě disku s ISO souborem a disku na který chcete nainstalovat KLIND OS.\n\nStatus služeb:\n$backendStatus\n$githubResponse\n\nInformace:\nVerze scriptu: $scriptVersion \Z2(aktuální)\Zn\n\n\nKLIND OS Installation script.\nNapsal Jakub Žitník. Napsáno v bash.\nGithub: jzitnik.dev/link/klindos-install-script" \
+  --msgbox "Vítejte v instalaci KLIND OS.\n\n\Z1!!! UPOZORNĚNÍ !!!\Zn\nTento script nemusí fungovat správně.\nPři instalaci doporučuji odpojit všechny ostatní disky kromě disku s ISO souborem a disku na který chcete nainstalovat KLIND OS.\n\nStatus služeb:\n$githubResponse\n\nInformace:\nVerze scriptu: $scriptVersion \Z2(aktuální)\Zn\n\n\nKLIND OS Installation script.\nNapsal Jakub Žitník. Napsáno v bash.\nGithub: jzitnik.dev/link/klindos-install-script" \
   25 60
 
      
