@@ -1,0 +1,9 @@
+{
+  language_loaded: "Jazyk byl načten úspěšně.",
+  internet: "Internet",
+  checking_internet: "Testuji připojení k internetu",
+  welcome: "Vítejte v KLIND OS instalaci.",
+  attention: "UPOZORNĚNÍ",
+  attention_text: "Tento script nemusí fungovat správně.\nPři instalaci doporučuji odpojit všechny ostatní disky kromě disku s ISO souborem a disku na který chcete nainstalovat KLIND OS.",
+  press_key: "Stiskněte klávesu pro pokračování...",
+}
