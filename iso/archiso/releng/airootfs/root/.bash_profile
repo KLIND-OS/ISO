@@ -1,1 +1,3 @@
-source /root/install/install.sh
+#!/bin/bash
+
+# TODO: Autostart

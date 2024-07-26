@@ -1,9 +1,6 @@
 import chalk from "chalk";
 import middlePad from "./middlePad.js";
-import inquirer from "inquirer";
-import PressToContinuePrompt from "inquirer-press-to-continue";
-
-inquirer.registerPrompt('press-to-continue', PressToContinuePrompt);
+import readline from "readline";
 
 const noclear = false;
 
@@ -15,12 +12,17 @@ const Cmd = {
   warning: (message) => console.log(`${chalk.yellow("Warning:")} ${message}`),
   error: (message) => console.log(`${chalk.red("Error:")} ${message}`),
   clear: () => noclear || console.clear(),
-  keyPress: async (msg) => {
-    await inquirer.prompt({
-      name: "key",
-      type: "press-to-continue",
-      anyKey: true,
-      pressToContinueMessage: msg,
+  pressEnter: (msg) => {
+    return new Promise((resolve) => {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+
+      rl.question(msg, () => {
+        rl.close();
+        resolve();
+      });
     });
   },
 };

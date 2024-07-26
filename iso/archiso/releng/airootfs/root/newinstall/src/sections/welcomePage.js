@@ -10,6 +10,6 @@ export default async function printWelcomePage(lang) {
   console.log(chalk.red(`!!! ${lang.getStr("attention")} !!!`));
   console.log(lang.getStr("attention_text"));
   Cmd.endSection();
-  await Cmd.keyPress(lang.getStr("press_key"));
+  await Cmd.pressEnter(lang.getStr("press_key"));
   Cmd.clear();
 }

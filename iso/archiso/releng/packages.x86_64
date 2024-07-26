@@ -76,6 +76,7 @@ ndisc6
 nfs-utils
 nilfs-utils
 nmap
+npm
 ntfs-3g
 nvme-cli
 open-iscsi
@@ -121,7 +122,6 @@ usbutils
 vim
 virtualbox-guest-utils-nox
 vpnc
-wezterm-terminfo
 wireless-regdb
 wireless_tools
 wpa_supplicant
