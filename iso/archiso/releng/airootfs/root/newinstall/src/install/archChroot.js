@@ -1,6 +1,9 @@
 import ora from "ora";
 import executeCommand from "../utils/executeCommand.js";
 import isEFI from "../utils/uefi.js";
+import JSON5 from "json5";
+import fs from "fs/promises";
+import path from "path";
 
 export default async function archChroot(
   hostname,
@@ -12,9 +15,20 @@ export default async function archChroot(
   lang,
 ) {
   const spinner = ora();
-  const UEFI = isEFI();
+  const UEFI = await isEFI();
+  const filepath = path.join(
+    import.meta.dirname,
+    "..",
+    "config",
+    "packages.json5",
+  );
+  const packagesFile = await fs.readFile(filepath, { encoding: "utf8" });
+  const packages = JSON5.parse(packagesFile).join(" ");
 
-  const commands = `
+  // Execute commands in chroot environment
+  await executeCommand(
+    `
+arch-chroot /mnt <<EOF
 ln -sf /usr/share/zoneinfo/${region}/${city} /etc/localtime
 hwclock --systohc
 
@@ -29,15 +43,18 @@ echo ${hostname} >> /etc/hostname
 
 echo "127.0.0.1    localhost" >> /etc/hosts
 echo "::1          localhost" >> /etc/hosts
-echo "127.0.1.1    ${hostname}.localdomain    ${hostname}" >> /etc/hosts
-echo -e "${rootPass}\\n${rootPass}" | passwd root
+echo "127.0.1.1    $hostname.localdomain    $hostname" >> /etc/hosts
+echo -e "${rootPass}\n${rootPass}" | passwd root
 
 pacman -S --noconfirm grub efibootmgr dosfstools os-prober mtools
-${UEFI ? `grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub --recheck` : `grub-install --target=i386-pc ${selectedDisk}`}
+if [ "${UEFI ? "yes" : "no"}" == "yes" ]; then
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub --recheck
+else
+    grub-install --target=i386-pc "${selectedDisk}"
+fi
 cp /etc/default/grub /etc/default/grub.backup
 
-pacman -S --noconfirm ${DRI} nano git networkmanager xorg xorg-xinit picom alacritty chromium base-devel xmonad xmonad-contrib nodejs dialog npm fuse2 pipewire pipewire-pulse pipewire-media-session pavucontrol dunst libnotify nm-connection-editor rofi inotify-tools gparted pamixer playerctl cups bluez bluez-utils blueberry iwd ntfs-3g acpi numlockx xf86-input-synaptics maim unzip zip
-
+pacman -S --noconfirm ${DRI} ${packages}
 systemctl enable NetworkManager
 systemctl enable cups
 systemctl enable bluetooth
@@ -47,12 +64,11 @@ echo "exec /usr/bin/pipewire &" >> ~/.xinitrc
 echo "exec /usr/bin/pipewire-pulse &" >> ~/.xinitrc
 echo "exec /usr/bin/pipewire-media-session &" >> ~/.xinitrc
 echo "exec xmonad" >> ~/.xinitrc
-`;
 
-  // Execute commands in chroot environment
-  await executeCommand(
-    `arch-chroot ${mountPoint} /bin/bash -c "${commands.replace(/\n/g, " && ")}"`,
+EOF
+`.trim(),
     spinner,
     lang,
+    "arch-chroot",
   );
 }

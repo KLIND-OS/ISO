@@ -1,4 +1,7 @@
 import archChroot from "./install/archChroot.js";
+import archChroot2 from "./install/archChroot2.js";
+import final from "./install/final.js";
+import klindosIn from "./install/klindosIn.js";
 import pacStrap from "./install/pacstrap.js";
 import partitionDisk from "./install/partition.js";
 import setupMountPoints from "./install/setupMount.js";
@@ -31,3 +34,6 @@ await partitionDisk(disk, lang);
 await setupMountPoints(disk, lang);
 await pacStrap(lang);
 await archChroot(hostname, ROOT_PASS, disk, DRI, region, city, lang);
+await klindosIn(branch, lang);
+await archChroot2(branch, lang);
+await final(lang);

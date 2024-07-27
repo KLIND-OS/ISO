@@ -1,10 +1,10 @@
 import { exec } from "child_process";
 import Cmd from "./cmd.js";
 
-export default async function executeCommand(command, spinner, lang) {
+export default async function executeCommand(command, spinner, lang, smallText) {
   try {
-    spinner.start(`${lang.getStr("executing")}: ${command}\n\n`);
     Cmd.endSection();
+    spinner.start(`${lang.getStr("executing")} ${smallText || command}\n\n`);
 
     const process = exec(command, { stdio: "pipe" });
 
@@ -21,21 +21,21 @@ export default async function executeCommand(command, spinner, lang) {
     await new Promise((resolve, reject) => {
       process.on("close", (code) => {
         if (code === 0) {
-          spinner.succeed(`${lang.getStr("success")}: ${command}`);
+          spinner.succeed(`${lang.getStr("success")}: ${smallText || command}`);
           resolve();
         } else {
-          spinner.fail(`${lang.getStr("error")}: ${command}`);
+          spinner.fail(`${lang.getStr("error")} ${smallText || command}`);
           reject(new Error(`Command failed with exit code ${code}`));
         }
       });
       process.on("error", (error) => {
-        spinner.fail(`${lang.getStr("error")}: ${command}`);
+        spinner.fail(`${lang.getStr("error")} ${smallText || command}`);
         reject(error);
       });
     });
   } catch (error) {
     Cmd.error(error.message);
-    Cmd.endSection();
   }
-  console.log("\n\n")
+  Cmd.endSection();
+  console.log("\n\n");
 }
