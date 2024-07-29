@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install archiso
-        run: pacman -Sy archiso --noconfirm
+        run: pacman -Sy archiso grub --noconfirm
         working-directory: iso/archiso
 
       - name: Run make-iso script
