@@ -1,0 +1,43 @@
+name: Build KLIND-OS ISO
+
+on:
+  push:
+    branches:
+      - main
+      - test
+      - workflows
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: write
+
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install archiso
+        run: pacman -Sy archiso grub --noconfirm
+        working-directory: iso/archiso
+
+      - name: Run make-iso script
+        run: bash makeiso.sh
+        working-directory: iso/archiso
+
+      - name: ISO soubor
+        uses: actions/upload-artifact@v4
+        with:
+          name: KLIND OS ISO soubor
+          path: iso/archiso/final/KLINDOS.iso
+
+      - name: Sha256 soubor
+        uses: actions/upload-artifact@v4
+        with:
+          name: KLIND OS ISO sha256 soubor
+          path: iso/archiso/final/KLINDOS.iso.sha256
