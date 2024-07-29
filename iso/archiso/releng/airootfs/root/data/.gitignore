@@ -1,0 +1,4 @@
+# All files in this folder are cloned here when building ISO
+
+*
+!.gitignore
