@@ -1,3 +1,3 @@
 #!/bin/bash
 
-# TODO: Autostart
+(cd ~/newinstall && npm start)
