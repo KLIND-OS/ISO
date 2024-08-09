@@ -18,4 +18,12 @@
   error: "Chyba:",
   success: "Hotovo:",
   executing: "Spouštím:",
+  done: "Dokončeno!",
+  done_text: "KLIND OS je úspěšně nainstalován.",
+  reboot: "Restartovat",
+  poweroff: "Vypnout",
+  select: "Vyberte:",
+  select_keyboard: "Vyberte rozložení klávesnice",
+  select_keyboard_variant: "Vyberte variantu rozložení klávesnice",
+  default: "VÝCHOZÍ",
 }

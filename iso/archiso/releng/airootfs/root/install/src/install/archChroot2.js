@@ -4,10 +4,8 @@ import executeCommand from "../utils/executeCommand.js";
 export default async function archChroot2(branch, lang, mountPoint = "/mnt") {
   const spinner = ora();
 
-  // Execute commands in chroot environment
   await executeCommand(
-    `
-arch-chroot ${mountPoint} <<EOF
+    `cat > ${mountPoint}/temp/continue2 << EOF
 grub-mkconfig -o /boot/grub/grub.cfg
 
 git clone --depth 1 --branch ${branch} https://github.com/KLIND-OS/Client /root/KLIND-OS-Client
@@ -29,10 +27,17 @@ echo "ExecStart=" >> /etc/systemd/system/getty@tty1.service.d/autologin.conf
 echo "ExecStart=-/sbin/agetty --autologin root --noclear %I \$TERM" >> /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
 chmod +x ~/bin/close
-EOF
-`.trim(),
+EOF`,
     spinner,
     lang,
-    "arch-chroot",
+    "chroot-setup2",
   );
+
+  // Execute commands in chroot environment
+  await executeCommand(
+    `arch-chroot ${mountPoint} bash /temp/continue2`,
+    spinner,
+    lang,
+  );
+  await executeCommand(`rm -r /mnt/temp`, spinner, lang);
 }

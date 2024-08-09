@@ -18,4 +18,12 @@
   error: "Error:",
   success: "Success:",
   executing: "Executing:",
+  done: "Done!",
+  done_text: "KLIND OS is installed successfully.",
+  reboot: "Reboot",
+  poweroff: "Power off",
+  select: "Select:",
+  select_keyboard: "Select your keyboard layout",
+  select_keyboard_variant: "Select your keyboard layout variant",
+  default: "DEFAULT",
 }

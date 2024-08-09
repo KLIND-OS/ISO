@@ -25,21 +25,19 @@ export default async function archChroot(
   const packagesFile = await fs.readFile(filepath, { encoding: "utf8" });
   const packages = JSON5.parse(packagesFile).join(" ");
 
-  // Execute commands in chroot environment
   await executeCommand(
-    `
-arch-chroot /mnt <<EOF
+    `mkdir /mnt/temp && cat > /mnt/temp/continue << EOF
 ln -sf /usr/share/zoneinfo/${region}/${city} /etc/localtime
 hwclock --systohc
 
 mv /etc/locale.gen /etc/locale.gen.backup
 touch /etc/locale.gen
-echo "cs_CZ.UTF-8 UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 mv /etc/locale.conf /etc/locale.conf.backup
-echo "LANG=cs_CZ.UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 locale-gen
 
-echo ${hostname} >> /etc/hostname
+echo "${hostname}" >> /etc/hostname
 
 echo "127.0.0.1    localhost" >> /etc/hosts
 echo "::1          localhost" >> /etc/hosts
@@ -64,11 +62,16 @@ echo "exec /usr/bin/pipewire &" >> ~/.xinitrc
 echo "exec /usr/bin/pipewire-pulse &" >> ~/.xinitrc
 echo "exec /usr/bin/pipewire-media-session &" >> ~/.xinitrc
 echo "exec xmonad" >> ~/.xinitrc
-
-EOF
-`.trim(),
+EOF`,
     spinner,
     lang,
-    "arch-chroot",
+    "chroot-setup",
+  );
+
+  // Execute commands in chroot environment
+  await executeCommand(
+    `arch-chroot /mnt bash /temp/continue`,
+    spinner,
+    lang,
   );
 }

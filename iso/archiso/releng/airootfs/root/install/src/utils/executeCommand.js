@@ -6,7 +6,7 @@ export default async function executeCommand(command, spinner, lang, smallText) 
     Cmd.endSection();
     spinner.start(`${lang.getStr("executing")} ${smallText || command}\n\n`);
 
-    const process = exec(command, { stdio: "pipe" });
+    const process = exec(command);
 
     // Stream stdout
     process.stdout.on("data", (data) => {
@@ -37,5 +37,5 @@ export default async function executeCommand(command, spinner, lang, smallText) 
     Cmd.error(error.message);
   }
   Cmd.endSection();
-  console.log("\n\n");
+  console.log("\n");
 }

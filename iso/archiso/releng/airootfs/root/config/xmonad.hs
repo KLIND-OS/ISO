@@ -13,7 +13,7 @@ import Graphics.X11.ExtraTypes.XF86 (xF86XK_AudioLowerVolume, xF86XK_AudioRaiseV
 startup :: X ()
 startup = do
     spawn "xsetroot -cursor_name left_ptr"
-    spawnOnce "setxkbmap cz"
+    spawnOnce "setxkbmap $(cat ~/layout)"
     spawnOnce "dunst"
     spawnOnce "bash /root/scripts/mirror.sh"
     spawnOnce "picom"
