@@ -1,19 +1,26 @@
-# KLIND OS Instalační ISO soubor a script
+# KLIND OS Installation ISO file and script
 
-Toto je repozitář který obsahuje instalační script a generátor ISO souboru.
+This is repository that contains KLIND OS installaction script.
 
-# Základní informace
+# Basic info
 
-Instalační script se nachází ve složce /iso/archiso/releng/airootfs/root/`
+Installation script is located here: `/iso/archiso/releng/airootfs/root/`
 
-Při spuštení instalačního systému se automaticky uživatel přihlásí do `root` uživatele a poté se spustí bash script který se nachází ve složce `install`. Script na automatické spuštění se nachází v souboru `.bash_profile` ve složce `/iso/archiso/releng/airootfs/root/`.
+After starting the ISO you will be automatically loged in as a `root` and then it will execute script that is inside of `install` folder.
 
-# Generování iso souboru
+# Generating ISO file
 
-Pokud chcete generovat ISO soubor musíte být na operačním systému Arch Linux. (nebo takhle, asi nemusíte ale mám to otestované pouze v Arch Linuxu) Poté si stáhnete program archiso pomocí
+If you want to generate your own ISO file you need to be on Arch Linux. Then you need to install program call archiso using this command:
 
 ```shell
 sudo pacman -S archiso
 ```
 
-Následně v terminálu spusťte soubor `makeiso.sh`. Následně iso soubor bude ve složce `output`.
+After that in the terminal run this:
+
+```
+cd iso/archiso
+sudo bash makeiso.sh
+```
+
+This will then generate the ISO file and sha256 and put it in `final` folder.
